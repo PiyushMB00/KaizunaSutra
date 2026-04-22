@@ -28,7 +28,7 @@ async function startQuiz() {
     if (!currentQuizType) return;
     
     try {
-        const response = await fetch(`data/${currentQuizType}.json`);
+        const response = await fetch(`/static/data/${currentQuizType}.json`);
         const data = await response.json();
         
         // Shuffle and take 10
@@ -132,18 +132,36 @@ function handleAnswer(selected, correct, btnNode) {
 }
 
 function endQuiz() {
-    activeDiv.style.display = 'none';
-    resultsDiv.style.display = 'flex';
-    document.getElementById('final-score-value').textContent = score;
-    
-    // Update Streak logic here (simplified)
-    const progress = JSON.parse(localStorage.getItem('kaizuna_progress')) || {};
-    const today = new Date().toDateString();
-    
-    if (progress.lastStudyDate !== today) {
-        progress.streak = (progress.streak || 0) + 1;
-        progress.lastStudyDate = today;
-        localStorage.setItem('kaizuna_progress', JSON.stringify(progress));
+    const resultsDiv = document.getElementById('quiz-results');
+    resultsDiv.classList.remove('hidden');
+    document.getElementById('final-score').textContent = `Score: ${score} / ${totalQuestions}`;
+
+    // Update streak and accuracy
+    const progress = JSON.parse(localStorage.getItem('kizuna_progress'));
+    if (progress) {
+        const today = new Date().toISOString().split('T')[0];
+        
+        if (progress.lastStudyDate !== today) {
+            if (progress.lastStudyDate) {
+                const lastDate = new Date(progress.lastStudyDate);
+                const diffTime = Math.abs(new Date(today) - lastDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    progress.streak = (progress.streak || 0) + 1;
+                } else if (diffDays > 1) {
+                    progress.streak = 1; // Reset streak
+                }
+            } else {
+                progress.streak = 1;
+            }
+            progress.lastStudyDate = today;
+        }
+        
+        progress.quizCount = (progress.quizCount || 0) + totalQuestions;
+        progress.correctAnswers = (progress.correctAnswers || 0) + score;
+        
+        localStorage.setItem('kizuna_progress', JSON.stringify(progress));
     }
 
     gsap.from(resultsDiv, { scale: 0.9, duration: 0.5 });

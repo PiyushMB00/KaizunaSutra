@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Kanji | KizunaSutra{% endblock %}
+
+{% block content %}
+<main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Kanji</h1>
+                <p>Master essential Kanji characters. Click to mark as learned.</p>
+            </div>
+            
+            <div id="kanji-list" class="kanji-grid">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kanji.js') }}"></script>
+{% endblock %}

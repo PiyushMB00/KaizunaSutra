@@ -3,7 +3,7 @@ async function loadKanji() {
     if (!container) return;
 
     try {
-        const response = await fetch('data/kanji.json');
+        const response = await fetch('/static/data/kanji.json');
         const data = await response.json();
         
         container.innerHTML = '';
@@ -13,7 +13,12 @@ async function loadKanji() {
             card.className = `kanji-card ${isItemLearned ? 'learned' : ''}`;
             
             card.innerHTML = `
-                <div class="kanji-char">${item.kanji}</div>
+                <div class="kanji-tags">
+                    <span class="jlpt-tag ${item.level}">${item.level}</span>
+                    <span class="stroke-tag"><i class="fa-solid fa-pen"></i> ${item.strokes} strokes</span>
+                </div>
+                <div class="kanji-char special-kanji">${item.kanji}</div>
+                <div class="kanji-category">${item.category}</div>
                 <div class="kanji-details">
                     <div class="kanji-meaning">${item.meaning}</div>
                     <div class="kanji-reading">Onyomi: <span>${item.onyomi}</span></div>

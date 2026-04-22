@@ -487,10 +487,206 @@ main {
 .mb-4 { margin-bottom: 1rem; }
 .mb-8 { margin-bottom: 2rem; }
 
+/* Kanji Grid & Cards */
+.kanji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.kanji-card {
+  background: linear-gradient(145deg, var(--surface-color), #141b2d);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.kanji-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-color);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.kanji-card.learned {
+  background: linear-gradient(145deg, #132b1e, #0f172a);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.kanji-card.learned .kanji-action i {
+  color: var(--success-color);
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.kanji-action {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 1.2rem;
+  color: var(--border-color);
+}
+
+.kanji-details {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.kanji-meaning {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.kanji-reading {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.kanji-reading span {
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+/* Kanji Special Elements */
+.kanji-tags {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.jlpt-tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  color: white;
+}
+
+.jlpt-tag.N5 { background-color: #3b82f6; }
+.jlpt-tag.N4 { background-color: #10b981; }
+.jlpt-tag.N3 { background-color: #f59e0b; }
+.jlpt-tag.N2 { background-color: #ef4444; }
+.jlpt-tag.N1 { background-color: #8b5cf6; }
+
+.stroke-tag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.special-kanji {
+  font-size: 4rem !important;
+  background: linear-gradient(135deg, #fff, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.kanji-category {
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Vocab Grid & Cards */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.vocab-card {
+  background: linear-gradient(145deg, var(--surface-color), #141b2d);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.vocab-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-color);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.vocab-card.learned {
+  background: linear-gradient(145deg, #132b1e, #0f172a);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.vocab-card.learned .vocab-action i {
+  color: var(--success-color);
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.vocab-action {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 1.2rem;
+  color: var(--border-color);
+}
+
+.vocab-content {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.vocab-kana {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-family: "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
+}
+
+.vocab-kanji {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+
+.vocab-meaning {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   h1 { font-size: 2.25rem; }
-  .nav-links { display: none; /* Add mobile menu later */ }
+  .nav-links { display: none; }
   .hero-buttons { flex-direction: column; }
   .kana-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
 }

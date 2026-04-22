@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="background-kanji">
+        <span>あ</span>
+        <span>水</span>
+        <span>月</span>
+        <span>カ</span>
+        <span>日</span>
+    </div>
+
+    <main class="home-main">
+        <div class="container relative">
+            <!-- Glow effect -->
+            <div class="hero-glow"></div>
+
+            <section class="hero hero-enhanced">
+                <div class="hero-content">
+                    <h1>Master Japanese with <span class="gradient-text">KizunaSutra</span></h1>
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem; font-weight: 500;">Build Your Connection With Japan</h3>
+                    <p>KizunaSutra is a structured Japanese learning system designed to support daily practice and long-term preparation for studying in Japan.</p>
+                    <div class="hero-buttons">
+                        <a href="{{ url_for('hiragana') }}" class="btn btn-primary btn-large">Start Learning <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{{ url_for('about') }}" class="btn btn-secondary btn-large">Explore Project</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features mt-8">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-language"></i></div>
+                    <h3>Kana Mastery</h3>
+                    <p>Learn Hiragana and Katakana using an intuitive grid system. Track your progress dynamically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <h3>Vocabulary Building</h3>
+                    <p>Memorize essential JLPT N5-N1 words, their meanings, and pronunciations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <h3>Kanji Database</h3>
+                    <p>Master all Jouyou Kanji with Onyomi and Kunyomi readings mapped out for you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>Daily Progress</h3>
+                    <p>Stay consistent. Take daily quizzes and monitor your dashboard to build a strong study habit.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h3>Smart Quizzes</h3>
+                    <p>Test your knowledge with randomized quizzes designed to reinforce your memory effectively.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-medal"></i></div>
+                    <h3>Achievement System</h3>
+                    <p>Earn streaks and hit milestones to stay motivated on your path to fluency.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

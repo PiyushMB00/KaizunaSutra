@@ -1,34 +1,37 @@
 // Initialize tracking state
 function initProgress() {
-    if (!localStorage.getItem('kaizuna_progress')) {
-        const initialProgress = {
-            hiragana: {},
-            katakana: {},
-            kanji: {},
-            vocabulary: {},
-            streak: 0,
-            lastStudyDate: null
-        };
-        localStorage.setItem('kaizuna_progress', JSON.stringify(initialProgress));
+    // Migration from KaizunaSutra to KizunaSutra
+    let progress = JSON.parse(localStorage.getItem('kizuna_progress'));
+    if (!progress) {
+        const oldProgress = localStorage.getItem('kaizuna_progress');
+        if (oldProgress) {
+            progress = JSON.parse(oldProgress);
+        } else {
+            progress = {
+                hiragana: {}, katakana: {}, kanji: {}, vocabulary: {},
+                streak: 0, lastStudyDate: null, quizCount: 0, correctAnswers: 0
+            };
+        }
+        localStorage.setItem('kizuna_progress', JSON.stringify(progress));
     }
 }
 
 // Mark item as learned
 function toggleLearned(type, itemKey) {
-    const progress = JSON.parse(localStorage.getItem('kaizuna_progress')) || {};
+    const progress = JSON.parse(localStorage.getItem('kizuna_progress')) || {};
     if (!progress[type]) progress[type] = {};
     if (progress[type][itemKey]) {
         delete progress[type][itemKey];
     } else {
         progress[type][itemKey] = true;
     }
-    localStorage.setItem('kaizuna_progress', JSON.stringify(progress));
+    localStorage.setItem('kizuna_progress', JSON.stringify(progress));
     return !!progress[type][itemKey];
 }
 
 // Check if learned
 function isLearned(type, itemKey) {
-    const progress = JSON.parse(localStorage.getItem('kaizuna_progress')) || {};
+    const progress = JSON.parse(localStorage.getItem('kizuna_progress')) || {};
     if (!progress[type]) progress[type] = {};
     return !!progress[type][itemKey];
 }
@@ -39,7 +42,7 @@ async function loadKana(type, containerId) {
     if (!container) return;
 
     try {
-        const response = await fetch(`data/${type}.json`);
+        const response = await fetch(`/static/data/${type}.json`);
         const data = await response.json();
         
         container.innerHTML = '';
@@ -79,12 +82,13 @@ async function loadKana(type, containerId) {
 
 // Highlight active navigation link
 function setActiveNav() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.nav-links a');
     
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage) {
+        // Match exact path or if current path is '/' and link is '/'
+        if (linkHref === currentPath || (currentPath === '/' && linkHref === '/')) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');

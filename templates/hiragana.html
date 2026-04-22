@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Hiragana | KizunaSutra{% endblock %}
+
+{% block content %}
+<main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Learn Hiragana</h1>
+                <p>Click on a character to mark it as learned. Progress is saved automatically.</p>
+            </div>
+            
+            <div id="hiragana-grid" class="kana-grid">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

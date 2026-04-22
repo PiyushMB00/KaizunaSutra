@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice Quiz | KizunaSutra{% endblock %}
+
+{% block content %}
+<main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Daily Practice</h1>
+                <p>Test your knowledge to build confidence.</p>
+            </div>
+
+            <div class="quiz-container">
+                <!-- Setup Phase -->
+                <div id="quiz-setup" class="quiz-setup">
+                    <h2>Select Quiz Type</h2>
+                    <button class="quiz-type-btn" data-type="hiragana">Hiragana Recognition</button>
+                    <button class="quiz-type-btn" data-type="katakana">Katakana Recognition</button>
+                    <button class="quiz-type-btn" data-type="kanji">Kanji Meaning</button>
+                    <button class="quiz-type-btn" data-type="vocabulary">Vocabulary Meaning</button>
+                    <button id="start-btn" class="btn btn-primary mt-4" disabled>Start Quiz</button>
+                </div>
+
+                <!-- Active Quiz Phase -->
+                <div id="quiz-active" class="quiz-active">
+                    <div class="score-display">Question <span id="q-current">1</span>/10 &nbsp;|&nbsp; Score: <span id="score">0</span></div>
+                    <div id="question" class="question-box">あ</div>
+                    <div class="options-grid" id="options">
+                        <!-- Options injected here -->
+                    </div>
+                </div>
+
+                <!-- Results Phase -->
+                <div id="quiz-results" class="quiz-results">
+                    <h2>Quiz Completed!</h2>
+                    <div class="final-score"><span id="final-score-value">0</span>/10</div>
+                    <p>Great job practicing today!</p>
+                    <button id="restart-btn" class="btn btn-primary mt-4">Practice Again</button>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

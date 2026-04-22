@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
     if (!document.getElementById('stat-streak')) return; // Not on dashboard
     
-    const progress = JSON.parse(localStorage.getItem('kaizuna_progress')) || {
-        hiragana: {}, katakana: {}, kanji: {}, vocabulary: {}, streak: 0
+    const progress = JSON.parse(localStorage.getItem('kizuna_progress')) || {
+        hiragana: {}, katakana: {}, kanji: {}, vocabulary: {}, streak: 0, quizCount: 0, correctAnswers: 0
     };
 
     // Update basic stats
@@ -16,14 +16,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('stat-katakana').textContent = kCount;
     document.getElementById('stat-kanji').textContent = kjCount;
     document.getElementById('stat-vocab').textContent = vCount;
+    
+    // Quiz Accuracy
+    const accEl = document.getElementById('stat-accuracy');
+    if (accEl) {
+        if (progress.quizCount > 0) {
+            accEl.textContent = Math.round((progress.correctAnswers / progress.quizCount) * 100) + '%';
+        } else {
+            accEl.textContent = '0%';
+        }
+    }
 
     // Load totals for percentage calculation
     try {
         const [hRes, kRes, kjRes, vRes] = await Promise.all([
-            fetch('data/hiragana.json'),
-            fetch('data/katakana.json'),
-            fetch('data/kanji.json'),
-            fetch('data/vocabulary.json')
+            fetch('/static/data/hiragana.json'),
+            fetch('/static/data/katakana.json'),
+            fetch('/static/data/kanji.json'),
+            fetch('/static/data/vocabulary.json')
         ]);
         
         const hData = await hRes.json();
@@ -48,6 +58,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('bar-kanji').style.width = `${kjPct}%`;
             document.getElementById('bar-vocab').style.width = `${vPct}%`;
         }, 100);
+
+        // JLPT Readiness Calculation
+        const jlptStats = { N5: { total: 0, learned: 0 }, N4: { total: 0, learned: 0 }, N3: { total: 0, learned: 0 }, N2: { total: 0, learned: 0 }, N1: { total: 0, learned: 0 } };
+        
+        // Count totals and learned for Kanji
+        kjData.forEach(item => {
+            if (jlptStats[item.level]) {
+                jlptStats[item.level].total++;
+                if (progress.kanji[item.kanji]) jlptStats[item.level].learned++;
+            }
+        });
+        
+        // Count totals and learned for Vocab
+        vData.forEach(item => {
+            if (jlptStats[item.level]) {
+                jlptStats[item.level].total++;
+                if (progress.vocabulary[item.romaji]) jlptStats[item.level].learned++;
+            }
+        });
+
+        // Update JLPT Dashboard Bars
+        const jlptLevels = ['N5', 'N4', 'N3', 'N2', 'N1'];
+        const tracks = document.querySelectorAll('.jlpt-track .progress-bar-container');
+        const headers = document.querySelectorAll('.jlpt-track .progress-header .progress-pct');
+        
+        if (tracks.length === 5) {
+            jlptLevels.forEach((level, idx) => {
+                const stat = jlptStats[level];
+                const pct = stat.total > 0 ? Math.round((stat.learned / stat.total) * 100) : 0;
+                headers[idx].textContent = pct + '%';
+                setTimeout(() => { tracks[idx].firstElementChild.style.width = pct + '%'; }, 100);
+            });
+        }
 
         // Animate stats numbers
         gsap.from(".stat-value", {

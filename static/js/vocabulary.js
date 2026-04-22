@@ -5,7 +5,7 @@ async function loadVocabulary() {
     if (!container) return;
 
     try {
-        const response = await fetch('data/vocabulary.json');
+        const response = await fetch('/static/data/vocabulary.json');
         vocabData = await response.json();
         renderVocabulary(vocabData);
     } catch (error) {
@@ -24,15 +24,18 @@ function renderVocabulary(data) {
         card.className = `vocab-card ${isItemLearned ? 'learned' : ''}`;
         
         card.innerHTML = `
-            <div class="vocab-kanji">${item.kanji}</div>
-            <div class="vocab-details">
-                <span class="vocab-meaning">${item.meaning}</span>
-                <span class="vocab-romaji">${item.romaji}</span>
-            </div>
-            <div class="vocab-action">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-        `;
+                <div class="kanji-tags">
+                    <span class="jlpt-tag ${item.level}">${item.level}</span>
+                </div>
+                <div class="vocab-kana">${item.kanji}</div>
+                <div class="vocab-kanji">${item.romaji}</div>
+                <div class="vocab-content">
+                    <div class="vocab-meaning">${item.meaning}</div>
+                </div>
+                <div class="vocab-action">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            `;
         
         card.addEventListener('click', () => {
             const learned = toggleLearned('vocabulary', item.romaji);

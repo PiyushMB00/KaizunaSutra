@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}About | KizunaSutra{% endblock %}
+
+{% block content %}
+<main>
+        <div class="container" style="max-width: 800px;">
+            <div class="page-header">
+                <h1>About Project</h1>
+            </div>
+            
+            <div style="background-color: var(--surface-color); padding: 3rem; border-radius: var(--border-radius); border: 1px solid var(--border-color); line-height: 1.8;">
+                <h2>Why I Built This</h2>
+                <p>I created KizunaSutra to support my Japanese learning journey while preparing for the MEXT scholarship.</p>
+                <p>Instead of relying only on external apps, I wanted to build a structured system that combines learning, tracking, and daily practice.</p>
+                <p>This project demonstrates my commitment to studying in Japan and my ability to build practical systems using web development.</p>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
