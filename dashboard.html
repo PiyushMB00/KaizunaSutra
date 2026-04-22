@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | KaizunaSutra</title>
+    <meta name="description" content="Track your Japanese learning progress.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .progress-section {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background-color: var(--bg-color);
+            border-radius: 6px;
+            margin: 1rem 0 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 0%; /* Set via JS */
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .progress-pct {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">KaizunaSutra</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hiragana.html">Hiragana</a></li>
+                <li><a href="katakana.html">Katakana</a></li>
+                <li><a href="kanji.html">Kanji</a></li>
+                <li><a href="vocabulary.html">Vocabulary</a></li>
+                <li><a href="practice.html">Practice</a></li>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Learning Dashboard</h1>
+                <p>Track your consistency and monitor your knowledge base.</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Overview Stats (existing) -->
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
+                    <div class="stat-value" id="stat-streak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-a"></i></div>
+                    <div class="stat-value" id="stat-hiragana">0</div>
+                    <div class="stat-label">Hiragana Learned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-font"></i></div>
+                    <div class="stat-value" id="stat-katakana">0</div>
+                    <div class="stat-label">Katakana Learned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <div class="stat-value" id="stat-kanji">0</div>
+                    <div class="stat-label">Kanji Learned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
+                    <div class="stat-value" id="stat-vocab">0</div>
+                    <div class="stat-label">Vocabulary Learned</div>
+                </div>
+                <div class="stat-card" style="border-color: var(--accent-color); background: rgba(249, 115, 22, 0.05);">
+                    <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                    <div class="stat-value" id="stat-accuracy">94%</div>
+                    <div class="stat-label">Quiz Accuracy</div>
+                </div>
+            </div>
+
+            <div class="dashboard-split" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+                <div class="progress-section" style="margin-bottom: 0;">
+                    <h2>Mastery Progress</h2>
+                    
+                    <div class="progress-header mt-4">
+                        <span class="progress-title">Hiragana Mastery</span>
+                        <span class="progress-pct" id="pct-hiragana">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="bar-hiragana"></div>
+                    </div>
+                    
+                    <div class="progress-header">
+                        <span class="progress-title">Katakana Mastery</span>
+                        <span class="progress-pct" id="pct-katakana">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="bar-katakana"></div>
+                    </div>
+                    
+                    <div class="progress-header">
+                        <span class="progress-title">Kanji Mastery</span>
+                        <span class="progress-pct" id="pct-kanji">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="bar-kanji"></div>
+                    </div>
+                    
+                    <div class="progress-header">
+                        <span class="progress-title">Vocabulary Mastery</span>
+                        <span class="progress-pct" id="pct-vocab">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="bar-vocab"></div>
+                    </div>
+                </div>
+
+                <div class="progress-section" style="margin-bottom: 0;">
+                    <h2>JLPT Readiness</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Estimated capability based on vocabulary and kanji learned.</p>
+                    
+                    <div class="jlpt-track">
+                        <div class="progress-header">
+                            <span class="progress-title" style="color: #60a5fa;">N5 Beginner</span>
+                            <span class="progress-pct">85%</span>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 85%; background-color: #60a5fa;"></div></div>
+                        
+                        <div class="progress-header">
+                            <span class="progress-title" style="color: #34d399;">N4 Basic</span>
+                            <span class="progress-pct">40%</span>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 40%; background-color: #34d399;"></div></div>
+                        
+                        <div class="progress-header">
+                            <span class="progress-title" style="color: #fbbf24;">N3 Intermediate</span>
+                            <span class="progress-pct">12%</span>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 12%; background-color: #fbbf24;"></div></div>
+                        
+                        <div class="progress-header">
+                            <span class="progress-title" style="color: #f87171;">N2 Advanced</span>
+                            <span class="progress-pct">2%</span>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 2%; background-color: #f87171;"></div></div>
+                        
+                        <div class="progress-header">
+                            <span class="progress-title" style="color: #c084fc;">N1 Fluent</span>
+                            <span class="progress-pct">0%</span>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 0%; background-color: #c084fc;"></div></div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">KaizunaSutra</a>
+                    <p>Your comprehensive platform for mastering the Japanese language, built for dedicated learners.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Learning</h4>
+                    <ul>
+                        <li><a href="hiragana.html">Hiragana</a></li>
+                        <li><a href="katakana.html">Katakana</a></li>
+                        <li><a href="kanji.html">Kanji</a></li>
+                        <li><a href="vocabulary.html">Vocabulary</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="practice.html">Practice Quiz</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="about.html">About Project</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Connect</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fa-brands fa-github"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 KaizunaSutra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/progress.js"></script>
+</body>
+</html>

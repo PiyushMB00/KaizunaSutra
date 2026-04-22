@@ -1,0 +1,41 @@
+[
+  {"kanji": "水", "romaji": "mizu", "meaning": "Water", "level": "N5"},
+  {"kanji": "火", "romaji": "hi", "meaning": "Fire", "level": "N5"},
+  {"kanji": "学校", "romaji": "gakkou", "meaning": "School", "level": "N5"},
+  {"kanji": "学生", "romaji": "gakusei", "meaning": "Student", "level": "N5"},
+  {"kanji": "先生", "romaji": "sensei", "meaning": "Teacher", "level": "N5"},
+  {"kanji": "本", "romaji": "hon", "meaning": "Book", "level": "N5"},
+  {"kanji": "猫", "romaji": "neko", "meaning": "Cat", "level": "N5"},
+  {"kanji": "犬", "romaji": "inu", "meaning": "Dog", "level": "N5"},
+  {"kanji": "車", "romaji": "kuruma", "meaning": "Car", "level": "N5"},
+  {"kanji": "月", "romaji": "tsuki", "meaning": "Moon", "level": "N5"},
+  
+  {"kanji": "時間", "romaji": "jikan", "meaning": "Time", "level": "N4"},
+  {"kanji": "仕事", "romaji": "shigoto", "meaning": "Job, Work", "level": "N4"},
+  {"kanji": "名前", "romaji": "namae", "meaning": "Name", "level": "N4"},
+  {"kanji": "言葉", "romaji": "kotoba", "meaning": "Word, Language", "level": "N4"},
+  {"kanji": "元気", "romaji": "genki", "meaning": "Healthy, Energetic", "level": "N4"},
+  
+  {"kanji": "経験", "romaji": "keiken", "meaning": "Experience", "level": "N3"},
+  {"kanji": "環境", "romaji": "kankyou", "meaning": "Environment", "level": "N3"},
+  {"kanji": "文化", "romaji": "bunka", "meaning": "Culture", "level": "N3"},
+  {"kanji": "関係", "romaji": "kankei", "meaning": "Relationship", "level": "N3"},
+  {"kanji": "目的", "romaji": "mokuteki", "meaning": "Purpose, Goal", "level": "N3"},
+
+  {"kanji": "確認", "romaji": "kakunin", "meaning": "Confirmation", "level": "N2"},
+  {"kanji": "判断", "romaji": "handan", "meaning": "Judgment", "level": "N2"},
+  {"kanji": "絶対", "romaji": "zettai", "meaning": "Absolute", "level": "N2"},
+  {"kanji": "影響", "romaji": "eikyou", "meaning": "Influence, Effect", "level": "N2"},
+  {"kanji": "経済", "romaji": "keizai", "meaning": "Economy", "level": "N2"},
+
+  {"kanji": "曖昧", "romaji": "aimai", "meaning": "Vague, Ambiguous", "level": "N1"},
+  {"kanji": "矛盾", "romaji": "mujun", "meaning": "Contradiction", "level": "N1"},
+  {"kanji": "妥協", "romaji": "dakyou", "meaning": "Compromise", "level": "N1"},
+  {"kanji": "錯覚", "romaji": "sakkaku", "meaning": "Illusion, Hallucination", "level": "N1"},
+  {"kanji": "軌跡", "romaji": "kiseki", "meaning": "Locus, Track, Trace", "level": "N1"},
+  {"kanji": "驚愕", "romaji": "kyougaku", "meaning": "Astonishment", "level": "N1"},
+  {"kanji": "繊細", "romaji": "sensai", "meaning": "Delicate, Fine", "level": "N1"},
+  {"kanji": "傲慢", "romaji": "gouman", "meaning": "Arrogance", "level": "N1"},
+  {"kanji": "飛躍", "romaji": "hiyaku", "meaning": "Leap, Rapid progress", "level": "N1"},
+  {"kanji": "瞬間", "romaji": "shunkan", "meaning": "Moment, Instant", "level": "N1"}
+]
