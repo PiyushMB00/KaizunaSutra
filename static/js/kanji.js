@@ -17,6 +17,7 @@ async function loadKanji() {
                     <span class="jlpt-tag ${item.level}">${item.level}</span>
                     <span class="stroke-tag"><i class="fa-solid fa-pen"></i> ${item.strokes} strokes</span>
                 </div>
+                <i class="fa-solid fa-volume-high audio-btn kanji-audio" title="Play Pronunciation"></i>
                 <div class="kanji-char special-kanji">${item.kanji}</div>
                 <div class="kanji-category">${item.category}</div>
                 <div class="kanji-details">
@@ -29,7 +30,17 @@ async function loadKanji() {
                 </div>
             `;
             
-            card.addEventListener('click', () => {
+            // Audio click
+            const audioBtn = card.querySelector('.audio-btn');
+            audioBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const utterance = new SpeechSynthesisUtterance(item.kanji);
+                utterance.lang = 'ja-JP';
+                speechSynthesis.speak(utterance);
+            });
+
+            card.addEventListener('click', (e) => {
+                if(e.target.classList.contains('audio-btn')) return;
                 const learned = toggleLearned('kanji', item.kanji);
                 if (learned) {
                     card.classList.add('learned');

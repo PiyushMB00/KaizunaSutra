@@ -65,16 +65,25 @@ function loadQuestion() {
     const optionsEl = document.getElementById('options');
     
     // Set question text
+    const charToSpeak = (currentQuizType === 'vocabulary' || currentQuizType === 'kanji') 
+        ? activeQuestion.kanji : activeQuestion.kana;
+        
+    questionEl.innerHTML = `
+        <i class="fa-solid fa-volume-high audio-btn quiz-audio" id="quiz-audio-btn" title="Play Pronunciation"></i>
+        <span>${charToSpeak}</span>
+    `;
+
     if (currentQuizType === 'vocabulary') {
-        questionEl.textContent = activeQuestion.kanji;
         questionEl.style.fontSize = '3rem';
-    } else if (currentQuizType === 'kanji') {
-        questionEl.textContent = activeQuestion.kanji;
-        questionEl.style.fontSize = '4rem';
     } else {
-        questionEl.textContent = activeQuestion.kana;
         questionEl.style.fontSize = '4rem';
     }
+
+    document.getElementById('quiz-audio-btn').addEventListener('click', () => {
+        const utterance = new SpeechSynthesisUtterance(charToSpeak);
+        utterance.lang = 'ja-JP';
+        speechSynthesis.speak(utterance);
+    });
     
     // Generate Options
     optionsEl.innerHTML = '';
@@ -97,18 +106,18 @@ function loadQuestion() {
 
     options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
+        btn.className = 'quiz-option';
         btn.textContent = opt;
         btn.addEventListener('click', () => handleAnswer(opt, correctAnswer, btn));
         optionsEl.appendChild(btn);
     });
 
     gsap.from(questionEl, { y: -20, duration: 0.3 });
-    gsap.from(".option-btn", { y: 10, duration: 0.3, stagger: 0.1 });
+    gsap.from(".quiz-option", { y: 10, duration: 0.3, stagger: 0.1 });
 }
 
 function handleAnswer(selected, correct, btnNode) {
-    const options = document.querySelectorAll('.option-btn');
+    const options = document.querySelectorAll('.quiz-option');
     options.forEach(btn => btn.disabled = true); // Disable all
 
     if (selected === correct) {

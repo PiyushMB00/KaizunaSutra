@@ -36,6 +36,10 @@ function isLearned(type, itemKey) {
     return !!progress[type][itemKey];
 }
 
+let sessionLearnedCount = 0;
+let recentLearnedItems = [];
+let currentKanaData = [];
+
 // Load Kana Data
 async function loadKana(type, containerId) {
     const container = document.getElementById(containerId);
@@ -44,39 +48,148 @@ async function loadKana(type, containerId) {
     try {
         const response = await fetch(`/static/data/${type}.json`);
         const data = await response.json();
+        currentKanaData = data;
         
         container.innerHTML = '';
         data.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = `kana-card ${isLearned(type, item.romaji) ? 'learned' : ''}`;
+            
+            // Remove fake examples and only show if they exist in JSON
+            let exampleHTML = '';
+            if (item.example) {
+                exampleHTML = `
+                    <div style="color:var(--accent-color); margin-bottom:0.25rem; font-size: 0.85rem; line-height: 1.2;"><b>Ex:</b> ${item.example}</div>
+                    <div style="color:var(--text-muted); margin-bottom:0.8rem; font-size: 0.8rem; line-height: 1.2;"><b>Mean:</b> ${item.example_meaning}</div>
+                `;
+            } else {
+                exampleHTML = `<div style="margin-bottom: 0.8rem;"></div>`;
+            }
+
             card.innerHTML = `
-                <div class="kana-char">${item.kana}</div>
-                <div class="kana-romaji">${item.romaji}</div>
+                <div class="kana-card-inner">
+                    <div class="kana-card-front">
+                        <i class="fa-solid fa-volume-high audio-btn" title="Play Pronunciation"></i>
+                        <div class="kana-char" style="font-size: 3.5rem;">${item.kana}</div>
+                        <div class="kana-romaji" style="margin-top:0.2rem; font-size:1.3rem; font-weight:bold; color: var(--text-main)">${item.romaji.toUpperCase()}</div>
+                        <i class="fa-solid fa-arrows-rotate flip-icon" title="Flip Card"></i>
+                    </div>
+                    <div class="kana-card-back">
+                        <div style="font-size: 1.5rem; margin-bottom:0.5rem; font-weight:bold; color: var(--text-main)">${item.kana}</div>
+                        <div style="font-size: 1.1rem; margin-bottom:0.5rem; color: var(--accent-color)">${item.romaji.toUpperCase()}</div>
+                        ${exampleHTML}
+                        <button class="mark-learned-btn">${isLearned(type, item.romaji) ? 'Learned ✓' : 'Mark Learned'}</button>
+                    </div>
+                </div>
             `;
             
-            // Toggle learned state on click
-            card.addEventListener('click', () => {
+            // Audio click
+            const audioBtn = card.querySelector('.audio-btn');
+            audioBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent card flip
+                const utterance = new SpeechSynthesisUtterance(item.kana);
+                utterance.lang = 'ja-JP';
+                speechSynthesis.speak(utterance);
+            });
+
+            // Flip click
+            card.addEventListener('click', (e) => {
+                if(e.target.classList.contains('mark-learned-btn') || e.target.classList.contains('audio-btn')) return;
+                card.classList.toggle('flipped');
+            });
+
+            // Mark learned
+            const markBtn = card.querySelector('.mark-learned-btn');
+            markBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const learned = toggleLearned(type, item.romaji);
                 if (learned) {
                     card.classList.add('learned');
-                    gsap.from(card, {
-                        scale: 1.1,
-                        boxShadow: "0 0 20px rgba(34, 197, 94, 0.5)",
-                        duration: 0.3
-                    });
+                    markBtn.innerText = 'Learned ✓';
+                    checkQuickQuiz(type, item);
                 } else {
                     card.classList.remove('learned');
+                    markBtn.innerText = 'Mark as Learned';
                 }
             });
-
-            // Removed entrance animation for visibility
-
 
             container.appendChild(card);
         });
     } catch (error) {
         console.error(`Error loading ${type}:`, error);
         container.innerHTML = '<p>Error loading character data.</p>';
+    }
+}
+
+function checkQuickQuiz(type, item) {
+    sessionLearnedCount++;
+    recentLearnedItems.push(item);
+    if (sessionLearnedCount % 5 === 0) {
+        triggerQuickQuiz(type);
+    }
+}
+
+function triggerQuickQuiz(type) {
+    const targetItem = recentLearnedItems[Math.floor(Math.random() * recentLearnedItems.length)];
+    
+    let modal = document.getElementById('quick-quiz-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'quick-quiz-modal';
+        document.body.appendChild(modal);
+    }
+    
+    const options = [targetItem.romaji];
+    while(options.length < 4 && currentKanaData.length >= 4) {
+        const randItem = currentKanaData[Math.floor(Math.random() * currentKanaData.length)];
+        if(!options.includes(randItem.romaji)) options.push(randItem.romaji);
+    }
+    options.sort(() => Math.random() - 0.5); // Shuffle
+    
+    let optionsHtml = options.map(opt => `<button class="quiz-opt-btn" onclick="checkQuickQuizAnswer('${opt}', '${targetItem.romaji}')">${opt}</button>`).join('');
+    
+    modal.innerHTML = `
+        <div class="quiz-modal-content">
+            <h2 style="color:var(--accent-color); margin-bottom:0.5rem">Quick Test Time!</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem">You learned 5 new characters. Let's practice.</p>
+            <p style="font-size:1.2rem; margin-bottom:1.5rem">What is <span style="font-size:2.5rem; font-weight:bold; color:white;">${targetItem.kana}</span> ?</p>
+            <div class="quiz-options">
+                ${optionsHtml}
+            </div>
+            <p id="quick-quiz-feedback" style="margin-top:1.5rem; font-weight:bold; height:20px; font-size: 1.1rem;"></p>
+        </div>
+    `;
+    modal.classList.add('active');
+}
+
+window.checkQuickQuizAnswer = function(selected, correct) {
+    const feedback = document.getElementById('quick-quiz-feedback');
+    const buttons = document.querySelectorAll('.quiz-opt-btn');
+    
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        if(btn.innerText === correct) {
+            btn.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
+            btn.style.borderColor = 'var(--success-color)';
+        } else if (btn.innerText === selected && selected !== correct) {
+            btn.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+            btn.style.borderColor = '#ef4444';
+        }
+    });
+
+    if(selected === correct) {
+        feedback.style.color = 'var(--success-color)';
+        feedback.innerText = 'Correct! Great job.';
+        setTimeout(() => {
+            document.getElementById('quick-quiz-modal').classList.remove('active');
+            recentLearnedItems = []; // Reset for next batch
+        }, 1500);
+    } else {
+        feedback.style.color = '#ef4444';
+        feedback.innerText = 'Oops! Try again next time.';
+        setTimeout(() => {
+            document.getElementById('quick-quiz-modal').classList.remove('active');
+        }, 2000);
     }
 }
 

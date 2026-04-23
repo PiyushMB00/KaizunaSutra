@@ -27,6 +27,7 @@ function renderVocabulary(data) {
                 <div class="kanji-tags">
                     <span class="jlpt-tag ${item.level}">${item.level}</span>
                 </div>
+                <i class="fa-solid fa-volume-high audio-btn vocab-audio" title="Play Pronunciation"></i>
                 <div class="vocab-kana">${item.kanji}</div>
                 <div class="vocab-kanji">${item.romaji}</div>
                 <div class="vocab-content">
@@ -37,7 +38,17 @@ function renderVocabulary(data) {
                 </div>
             `;
         
-        card.addEventListener('click', () => {
+        // Audio click
+        const audioBtn = card.querySelector('.audio-btn');
+        audioBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const utterance = new SpeechSynthesisUtterance(item.kanji);
+            utterance.lang = 'ja-JP';
+            speechSynthesis.speak(utterance);
+        });
+
+        card.addEventListener('click', (e) => {
+            if(e.target.classList.contains('audio-btn')) return;
             const learned = toggleLearned('vocabulary', item.romaji);
             if (learned) {
                 card.classList.add('learned');
