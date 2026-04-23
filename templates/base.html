@@ -23,9 +23,65 @@
                 <li><a href="{{ url_for('vocabulary') }}">Vocabulary</a></li>
                 <li><a href="{{ url_for('practice') }}">Practice</a></li>
                 <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li class="xp-display">
+                    <span id="user-level" style="color: var(--accent-color); font-weight: bold; font-size: 0.8rem; background: rgba(249, 115, 22, 0.1); padding: 2px 8px; border-radius: 4px;">Lvl 1</span>
+                    <span id="user-xp" style="color: #fff; font-weight: bold; margin-left: 5px;">0 XP</span>
+                </li>
             </ul>
         </div>
     </nav>
+
+    <!-- Writing Practice Modal -->
+    <div id="writing-modal" class="modal">
+        <div class="modal-content writing-modal-content">
+            <span class="close-modal" id="close-writing-modal">&times;</span>
+            <div id="writing-steps">
+                <!-- Step 1: Preview -->
+                <div id="writing-step-1" class="writing-step active">
+                    <h2 style="color: var(--accent-color)">Step 1: Observe</h2>
+                    <p style="color: var(--text-muted)">Take a good look at the character's shape.</p>
+                    <div id="large-kana-preview" class="large-kana-preview">あ</div>
+                    <button class="writing-btn writing-btn-primary" onclick="goToStep(2)">Next: Stroke Order</button>
+                </div>
+                <!-- Step 2: Animation -->
+                <div id="writing-step-2" class="writing-step">
+                    <h2 style="color: var(--accent-color)">Step 2: Stroke Order</h2>
+                    <p style="color: var(--text-muted)">Watch how the strokes are drawn.</p>
+                    <div id="stroke-animation-container" class="large-kana-preview">
+                        <!-- Simulated animation -->
+                        <div id="simulated-kana">あ</div>
+                    </div>
+                    <button class="writing-btn writing-btn-primary" onclick="goToStep(3)">Next: Practice Tracing</button>
+                </div>
+                <!-- Step 3: Tracing -->
+                <div id="writing-step-3" class="writing-step">
+                    <h2 style="color: var(--accent-color)">Step 3: User Traces It</h2>
+                    <p style="color: var(--text-muted)">Draw directly on the screen over the guide.</p>
+                    <div class="canvas-container">
+                        <canvas id="writing-canvas" width="300" height="300"></canvas>
+                        <div id="canvas-guide" class="canvas-guide-char">あ</div>
+                    </div>
+                    <div class="canvas-controls">
+                        <button class="writing-btn" onclick="clearCanvas()">Clear</button>
+                        <button class="writing-btn writing-btn-primary" onclick="checkTracingAccuracy()">Check Accuracy</button>
+                    </div>
+                </div>
+                <!-- Step 4: Success/XP -->
+                <div id="writing-step-4" class="writing-step">
+                    <div id="success-icon" style="font-size: 5rem; color: var(--success-color); margin-bottom: 1rem;">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h2 id="accuracy-feedback" style="color: #fff">Accuracy: 0%</h2>
+                    <p id="feedback-message" style="color: var(--text-muted); margin-bottom: 2rem;"></p>
+                    <div class="canvas-controls">
+                        <button class="writing-btn" onclick="goToStep(3)">Practice Again <i class="fa-solid fa-rotate-left"></i></button>
+                        <button class="writing-btn writing-btn-primary" id="next-writing-btn">Next Character <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <button class="writing-btn" id="finish-writing-btn" style="margin-top: 1rem; width: 100%; border: none; background: transparent; color: var(--text-muted);">Close Training</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% block content %}{% endblock %}
 

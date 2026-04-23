@@ -40,18 +40,8 @@ async function loadKanji() {
             });
 
             card.addEventListener('click', (e) => {
-                if(e.target.classList.contains('audio-btn')) return;
-                const learned = toggleLearned('kanji', item.kanji);
-                if (learned) {
-                    card.classList.add('learned');
-                    gsap.from(card, {
-                        x: 10,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                } else {
-                    card.classList.remove('learned');
-                }
+                if(e.target.closest('.audio-btn')) return;
+                startPracticeSession(data, index, 'kanji');
             });
 
             container.appendChild(card);
