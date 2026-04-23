@@ -1,10 +1,10 @@
-# KaizunaSutra
+# KizunaSutra
 
-# KaizunaSutra — Japanese Learning Website for MEXT Preparation
+# KizunaSutra — Japanese Learning Website for MEXT Preparation
 
 ## Project Overview
 
-**KaizunaSutra** is a browser-based Japanese learning system built to support MEXT scholarship preparation.
+**KizunaSutra** is a browser-based Japanese learning system built to support MEXT scholarship preparation.
 
 Meaning Breakdown
 Kizuna (絆) = bond, connection, human ties
@@ -190,7 +190,7 @@ Explain why the project was built.
 
 ## Why I Built This
 
-I created KaizunaSutra to support my Japanese learning journey while preparing for the MEXT scholarship.
+I created KizunaSutra to support my Japanese learning journey while preparing for the MEXT scholarship.
 
 Instead of relying only on external apps, I wanted to build a structured system that combines learning, tracking, and daily practice.
 
@@ -213,7 +213,7 @@ This project demonstrates my commitment to studying in Japan and my ability to b
 # Recommended Folder Structure
 
 ```bash
-KaizunaSutra/
+KizunaSutra/
 │
 ├── index.html
 ├── hiragana.html
@@ -332,6 +332,6 @@ This project proves:
 
 # Final Project Statement
 
-KaizunaSutra is a self-built Japanese learning system designed to support consistent language study and demonstrate readiness for academic life in Japan.
+KizunaSutra is a self-built Japanese learning system designed to support consistent language study and demonstrate readiness for academic life in Japan.
 
 This website combines language learning with progress tracking to create a structured preparation system for the MEXT scholarship journey.
